@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dispositivo Monitorando Bateria</title>
 
-  <!-- Importar os SDKs necessários do Firebase -->
+  <!-- Importando as bibliotecas do Firebase -->
   <script type="module">
-    // Importa as funções necessárias do Firebase SDK
+    // Importar as funções que você precisa do SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
-    // Configuração do Firebase
+    // Configuração do Firebase (copie e cole as suas credenciais aqui)
     const firebaseConfig = {
       apiKey: "AIzaSyAwM-OJnFSKBaxr1iqFUWe9ObrOBDfbmps",
       authDomain: "batterysamples-daa17.firebaseapp.com",
@@ -24,50 +24,40 @@
       measurementId: "G-139E3RJ45H"
     };
 
-    // Inicializa o Firebase
+    // Inicializando o Firebase
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
-    // Função para enviar os dados da bateria para o Firebase
-    function sendBatteryData() {
-      if ('battery' in navigator) {
-        navigator.getBattery().then(function (battery) {
-          const deviceID = "device1";  // Identificador único para o dispositivo
+    if ('battery' in navigator) {
+      navigator.getBattery().then(function (battery) {
+        function sendBatteryData() {
+          const deviceID = "device1";  // Identificador único para cada dispositivo
           const batteryData = {
-            level: Math.floor(battery.level * 100),  // Nível da bateria em porcentagem
-            charging: battery.charging  // Se a bateria está carregando ou não
+            level: Math.floor(battery.level * 100),
+            charging: battery.charging
           };
 
-          // Log para verificar os dados antes de enviar
-          console.log("Enviando dados para o Firebase:", batteryData);
+          // Definir a referência para enviar os dados para o Firebase
+          const batteryRef = ref(database, 'baterias/' + deviceID);
 
-          // Criação da referência no Firebase onde os dados serão salvos
-          const batteryRef = ref(database, 'baterias/device1');  // Corrigido para 'baterias/device1'
-
-          // Envia os dados para o Firebase
+          // Enviar os dados para o Firebase Realtime Database
           set(batteryRef, batteryData)
             .then(() => {
-              console.log("Dados enviados com sucesso:", batteryData);
+              console.log("Dados enviados com sucesso para o Firebase:", batteryData);
             })
             .catch((error) => {
               console.error("Erro ao enviar dados:", error);
             });
-        }).catch((error) => {
-          console.error("Erro ao acessar a API de Bateria:", error);
-        });
-      } else {
-        console.error("A API de Bateria não é suportada nesse navegador.");
-      }
+        }
+
+        // Enviar os dados da bateria assim que possível
+        sendBatteryData();
+
+        // Enviar os dados a cada 24 horas (86400000 milissegundos)
+        setInterval(sendBatteryData, 60000);
+      });
     }
-
-    // Envia os dados da bateria uma vez ao carregar a página
-    sendBatteryData();
-
-    // Envia os dados a cada 24 horas (86400000 milissegundos)
-    setInterval(sendBatteryData, 60000);  // A cada 24 horas
-
   </script>
-
 </head>
 
 <body>
