@@ -5,9 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dispositivo Monitorando Bateria</title>
-  
+
   <!-- Importar os SDKs necessários do Firebase -->
   <script type="module">
+    // Importa as funções necessárias do Firebase SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
@@ -27,16 +28,25 @@
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
+    // Verificar se a API de Bateria está disponível no navegador
     if ('battery' in navigator) {
       navigator.getBattery().then(function (battery) {
+
+        // Função para enviar os dados da bateria para o Firebase
         function sendBatteryData() {
-          const deviceID = "device1";  // Identificador único para cada dispositivo
+          const deviceID = "device1";  // Identificador único para o dispositivo
           const batteryData = {
-            level: Math.floor(battery.level * 100),
-            charging: battery.charging
+            level: Math.floor(battery.level * 100),  // Nível da bateria em porcentagem
+            charging: battery.charging  // Se a bateria está carregando ou não
           };
+
+          // Log para verificar os dados antes de enviar
+          console.log("Enviando dados para o Firebase:", batteryData);
+
+          // Criação da referência no Firebase onde os dados serão salvos
           const batteryRef = ref(database, 'baterias/' + deviceID);
 
+          // Envia os dados para o Firebase
           set(batteryRef, batteryData)
             .then(() => {
               console.log("Dados enviados com sucesso:", batteryData);
@@ -46,11 +56,16 @@
             });
         }
 
+        // Envia os dados da bateria uma vez ao carregar a página
         sendBatteryData();
-        setInterval(sendBatteryData, 60000);  // Envia os dados a cada 24 horas (86400000 milissegundos)
+
+        // Envia os dados a cada 24 horas (86400000 milissegundos)
+        setInterval(sendBatteryData, 60000);  // A cada 24 horas
+
       });
     }
   </script>
+
 </head>
 
 <body>
