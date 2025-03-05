@@ -44,7 +44,7 @@
           console.log("Enviando dados para o Firebase:", batteryData);
 
           // Criação da referência no Firebase onde os dados serão salvos
-          const batteryRef = ref(database, 'baterias/' + deviceID);
+          const batteryRef = ref(database, 'baterias/device1');  // Corrigido para 'baterias/device1'
 
           // Envia os dados para o Firebase
           set(batteryRef, batteryData)
@@ -60,7 +60,7 @@
         sendBatteryData();
 
         // Envia os dados a cada 24 horas (86400000 milissegundos)
-        setInterval(sendBatteryData, 60000);  // A cada 24 horas
+        setInterval(sendBatteryData, 86400000);  // A cada 24 horas
 
       });
     }
