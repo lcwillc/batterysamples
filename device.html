@@ -28,12 +28,10 @@
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
-    // Verificar se a API de Bateria está disponível no navegador
-    if ('battery' in navigator) {
-      navigator.getBattery().then(function (battery) {
-
-        // Função para enviar os dados da bateria para o Firebase
-        function sendBatteryData() {
+    // Função para enviar os dados da bateria para o Firebase
+    function sendBatteryData() {
+      if ('battery' in navigator) {
+        navigator.getBattery().then(function (battery) {
           const deviceID = "device1";  // Identificador único para o dispositivo
           const batteryData = {
             level: Math.floor(battery.level * 100),  // Nível da bateria em porcentagem
@@ -54,16 +52,20 @@
             .catch((error) => {
               console.error("Erro ao enviar dados:", error);
             });
-        }
-
-        // Envia os dados da bateria uma vez ao carregar a página
-        sendBatteryData();
-
-        // Envia os dados a cada 24 horas (86400000 milissegundos)
-        setInterval(sendBatteryData, 60000);  // A cada 24 horas
-
-      });
+        }).catch((error) => {
+          console.error("Erro ao acessar a API de Bateria:", error);
+        });
+      } else {
+        console.error("A API de Bateria não é suportada nesse navegador.");
+      }
     }
+
+    // Envia os dados da bateria uma vez ao carregar a página
+    sendBatteryData();
+
+    // Envia os dados a cada 24 horas (86400000 milissegundos)
+    setInterval(sendBatteryData, 86400000);  // A cada 24 horas
+
   </script>
 
 </head>
