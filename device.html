@@ -47,7 +47,7 @@
         }
 
         sendBatteryData();
-        setInterval(sendBatteryData, 86400000);  // Envia a cada 24 horas
+        setInterval(sendBatteryData, 60000);  // Envia a cada 24 horas
       });
     } else {
       console.error("API de Bateria não é suportada neste navegador.");
