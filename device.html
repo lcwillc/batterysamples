@@ -1,67 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dispositivo Monitorando Bateria</title>
+  <title>Monitoramento de Bateria - Painel</title>
 
-  <!-- Importando as bibliotecas do Firebase -->
+  <!-- Importando o SDK do Firebase -->
   <script type="module">
-    // Importar as funções que você precisa do SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
 
-    // Configuração do Firebase (copie e cole as suas credenciais aqui)
+    // Configuração do Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyAwM-OJnFSKBaxr1iqFUWe9ObrOBDfbmps",
-      authDomain: "batterysamples-daa17.firebaseapp.com",
-      databaseURL: "https://batterysamples-daa17-default-rtdb.firebaseio.com",
-      projectId: "batterysamples-daa17",
-      storageBucket: "batterysamples-daa17.firebasestorage.app",
-      messagingSenderId: "588555151201",
-      appId: "1:588555151201:web:59796070b6faff63b20720",
-      measurementId: "G-139E3RJ45H"
+      apiKey: "AIzaSyC738oCJHNuIVRA8aFX3T2OTVKnuVcm5MQ",
+      authDomain: "battery-f8cdc.firebaseapp.com",
+      databaseURL: "https://battery-f8cdc-default-rtdb.firebaseio.com",
+      projectId: "battery-f8cdc",
+      storageBucket: "battery-f8cdc.firebasestorage.app",
+      messagingSenderId: "198743206465",
+      appId: "1:198743206465:web:824e28cb74a601b18db4c0",
+      measurementId: "G-3DV4M9BTZL"
     };
 
     // Inicializando o Firebase
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
+    const analytics = getAnalytics(app);
 
+    // Função para enviar os dados da bateria
     if ('battery' in navigator) {
-      navigator.getBattery().then(function (battery) {
+      navigator.getBattery().then(function(battery) {
+
+        // Função para enviar os dados para o Firebase
         function sendBatteryData() {
-          const deviceID = "device1";  // Identificador único para cada dispositivo
+          const deviceID = "device1";  // Identificador único para o dispositivo
           const batteryData = {
-            level: Math.floor(battery.level * 100),
-            charging: battery.charging
+            level: Math.floor(battery.level * 100),  // Nível de bateria (em percentual)
+            charging: battery.charging  // Se está carregando ou não
           };
 
-          // Definir a referência para enviar os dados para o Firebase
+          // Referência para o banco de dados Firebase
           const batteryRef = ref(database, 'baterias/' + deviceID);
 
-          // Enviar os dados para o Firebase Realtime Database
+          // Envia os dados para o Firebase Realtime Database
           set(batteryRef, batteryData)
             .then(() => {
-              console.log("Dados enviados com sucesso para o Firebase:", batteryData);
+              console.log("Dados de bateria enviados com sucesso:", batteryData);
             })
             .catch((error) => {
-              console.error("Erro ao enviar dados:", error);
+              console.error("Erro ao enviar dados para o Firebase:", error);
             });
         }
 
-        // Enviar os dados da bateria assim que possível
+        // Enviar os dados a cada 60 segundos (60000 milissegundos)
         sendBatteryData();
-
-        // Enviar os dados a cada 24 horas (86400000 milissegundos)
         setInterval(sendBatteryData, 60000);
       });
+    } else {
+      console.error("A API Battery Status não é suportada neste navegador.");
     }
   </script>
 </head>
 
 <body>
-  <h1>Monitorando Bateria do Dispositivo</h1>
+  <h1>Monitorando a Bateria do Dispositivo</h1>
 </body>
-
 </html>
