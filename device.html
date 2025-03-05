@@ -36,11 +36,18 @@
             charging: battery.charging
           };
           const batteryRef = ref(database, 'baterias/' + deviceID);
-          set(batteryRef, batteryData);
+
+          set(batteryRef, batteryData)
+            .then(() => {
+              console.log("Dados enviados com sucesso:", batteryData);
+            })
+            .catch((error) => {
+              console.error("Erro ao enviar dados:", error);
+            });
         }
 
         sendBatteryData();
-        setInterval(sendBatteryData, 60000);  // Envia os dados a cada 24 horas (86400000 milissegundos)
+        setInterval(sendBatteryData, 86400000);  // Envia os dados a cada 24 horas (86400000 milissegundos)
       });
     }
   </script>
