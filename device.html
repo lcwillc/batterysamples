@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dispositivo Monitorando Bateria</title>
+  <title>Monitorando Bateria do Dispositivo</title>
+
+  <!-- Importando as funções necessárias do Firebase -->
   <script type="module">
-    // Importando as funções necessárias do SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js"; 
 
-    // Configuração do Firebase para o projeto 'battery-f8cdc'
+    // Configuração do Firebase para o seu projeto
     const firebaseConfig = {
       apiKey: "AIzaSyC738oCJHNuIVRA8aFX3T2OTVKnuVcm5MQ",
       authDomain: "battery-f8cdc.firebaseapp.com",
-      databaseURL: "https://battery-f8cdc-default-rtdb.firebaseio.com",  // URL do seu Firebase
+      databaseURL: "https://battery-f8cdc-default-rtdb.firebaseio.com",  // A URL correta do seu banco de dados
       projectId: "battery-f8cdc",
       storageBucket: "battery-f8cdc.appspot.com",
       messagingSenderId: "198743206465",
@@ -36,9 +37,9 @@
           };
 
           // Referência ao banco de dados para gravar os dados
-          const batteryRef = ref(database, 'baterias/' + deviceID);  // Garantindo o caminho correto
+          const batteryRef = ref(database, 'baterias/' + deviceID);  // Corrigido para enviar os dados corretamente
 
-          // Gravando os dados de bateria
+          // Gravando os dados de bateria no Firebase
           set(batteryRef, batteryData)
             .then(() => {
               console.log('Dados enviados com sucesso');
