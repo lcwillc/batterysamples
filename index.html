@@ -1,48 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitoramento de Bateria - Painel</title>
-  
-  <!-- Importar os SDKs necessários do Firebase -->
   <script type="module">
+    // Importando as funções necessárias do SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js"; 
 
-    // Configuração do Firebase
+    // Configuração do Firebase para o projeto 'battery-f8cdc'
     const firebaseConfig = {
-      apiKey: "AIzaSyAwM-OJnFSKBaxr1iqFUWe9ObrOBDfbmps",
-      authDomain: "batterysamples-daa17.firebaseapp.com",
-      databaseURL: "https://batterysamples-daa17-default-rtdb.firebaseio.com",
-      projectId: "batterysamples-daa17",
-      storageBucket: "batterysamples-daa17.firebasestorage.app",
-      messagingSenderId: "588555151201",
-      appId: "1:588555151201:web:59796070b6faff63b20720",
-      measurementId: "G-139E3RJ45H"
+      apiKey: "AIzaSyC738oCJHNuIVRA8aFX3T2OTVKnuVcm5MQ",
+      authDomain: "battery-f8cdc.firebaseapp.com",  // Nome correto do projeto
+      databaseURL: "https://battery-f8cdc-default-rtdb.firebaseio.com",  // Nome correto do projeto
+      projectId: "battery-f8cdc",  // Nome correto do projeto
+      storageBucket: "battery-f8cdc.appspot.com",
+      messagingSenderId: "198743206465",
+      appId: "1:198743206465:web:824e28cb74a601b18db4c0",
+      measurementId: "G-3DV4M9BTZL"
     };
 
-    // Inicializa o Firebase
+    // Inicializando o Firebase
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
-    // Referência para os dados das baterias
+    // Referência ao banco de dados do Firebase
     const batteryRef = ref(database, 'baterias');
 
-    // Função para atualizar o painel com os dados da bateria
+    // Escutando mudanças no banco de dados
     onValue(batteryRef, (snapshot) => {
       const data = snapshot.val();
       document.getElementById('device1').textContent = `Nível: ${data.device1.level}% | Carregando: ${data.device1.charging ? 'Sim' : 'Não'}`;
     });
   </script>
 </head>
-
 <body>
   <h1>Monitoramento de Bateria em Tempo Real</h1>
   <div id="batteryStatus">
     <p><strong>Dispositivo 1:</strong> <span id="device1"></span></p>
   </div>
 </body>
-
 </html>
