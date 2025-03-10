@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitorando Bateria do Dispositivo</title>
 
-  <!-- Importando as funções necessárias do Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js"; 
@@ -14,7 +13,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyC738oCJHNuIVRA8aFX3T2OTVKnuVcm5MQ",
       authDomain: "battery-f8cdc.firebaseapp.com",
-      databaseURL: "https://battery-f8cdc-default-rtdb.firebaseio.com",  // URL do seu banco de dados
+      databaseURL: "https://battery-f8cdc-default-rtdb.firebaseio.com",  // Sua URL do Firebase
       projectId: "battery-f8cdc",
       storageBucket: "battery-f8cdc.appspot.com",
       messagingSenderId: "198743206465",
@@ -29,6 +28,8 @@
     // Função para enviar os dados de bateria
     if ('battery' in navigator) {
       navigator.getBattery().then(function(battery) {
+        console.log('API de Bateria disponível!');
+
         function sendBatteryData() {
           const deviceID = "device1";  // Identificador único para o dispositivo
           const batteryData = {
@@ -36,10 +37,10 @@
             charging: battery.charging  // Status de carregamento
           };
 
-          // Referência ao banco de dados para gravar os dados
-          const batteryRef = ref(database, 'baterias/' + deviceID);  // Caminho correto para gravar os dados
+          // Caminho para gravar os dados de bateria no Firebase
+          const batteryRef = ref(database, 'baterias/' + deviceID); 
 
-          // Gravando os dados de bateria no Firebase
+          // Gravando os dados no Firebase
           set(batteryRef, batteryData)
             .then(() => {
               console.log('Dados enviados com sucesso');
@@ -50,8 +51,12 @@
         }
 
         sendBatteryData();
-        setInterval(sendBatteryData, 60000);  
+        setInterval(sendBatteryData, 60000);  // Envia os dados a cada 24 horas (86400000 milissegundos)
+      }).catch(error => {
+        console.error('Erro ao acessar a API de Bateria:', error);
       });
+    } else {
+      console.error('API de Bateria não disponível neste dispositivo!');
     }
   </script>
 </head>
