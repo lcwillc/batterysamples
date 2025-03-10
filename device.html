@@ -34,10 +34,10 @@
             level: Math.floor(battery.level * 100),  // Percentual de bateria
             charging: battery.charging  // Status de carregamento
           };
-          
+
           // Referência ao banco de dados para gravar os dados
-          const batteryRef = ref(database, 'baterias/' + deviceID);
-          
+          const batteryRef = ref(database, 'baterias/' + deviceID);  // Garantindo o caminho correto
+
           // Gravando os dados de bateria
           set(batteryRef, batteryData)
             .then(() => {
@@ -49,7 +49,7 @@
         }
 
         sendBatteryData();
-        setInterval(sendBatteryData, 86400000);  // Envia os dados a cada 24 horas (86400000 milissegundos)
+        setInterval(sendBatteryData, 60000); 
       });
     }
   </script>
