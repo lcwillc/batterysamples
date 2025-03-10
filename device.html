@@ -14,7 +14,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyC738oCJHNuIVRA8aFX3T2OTVKnuVcm5MQ",
       authDomain: "battery-f8cdc.firebaseapp.com",
-      databaseURL: "https://battery-f8cdc-default-rtdb.firebaseio.com",  // A URL correta do seu banco de dados
+      databaseURL: "https://battery-f8cdc-default-rtdb.firebaseio.com",  // URL do seu banco de dados
       projectId: "battery-f8cdc",
       storageBucket: "battery-f8cdc.appspot.com",
       messagingSenderId: "198743206465",
@@ -37,7 +37,7 @@
           };
 
           // Referência ao banco de dados para gravar os dados
-          const batteryRef = ref(database, 'baterias/' + deviceID);  // Corrigido para enviar os dados corretamente
+          const batteryRef = ref(database, 'baterias/' + deviceID);  // Caminho correto para gravar os dados
 
           // Gravando os dados de bateria no Firebase
           set(batteryRef, batteryData)
@@ -50,7 +50,7 @@
         }
 
         sendBatteryData();
-        setInterval(sendBatteryData, 60000); 
+        setInterval(sendBatteryData, 60000);  
       });
     }
   </script>
